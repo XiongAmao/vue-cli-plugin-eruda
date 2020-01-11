@@ -1,6 +1,6 @@
 {
-  "name": "webpack",
-  "version": "1.0.0",
+  "name": "vue-cli-plugin-eruda",
+  "version": "0.1.0",
   "description": "",
   "main": "index.js",
   "dependencies": {
@@ -13,6 +13,6 @@
   "scripts": {
     "b": "webpack --config webpack.config.js"
   },
-  "author": "",
-  "license": "ISC"
+  "author": "Zichao Xiong <onycat@live.cn>",
+  "license": "MIT"
 }

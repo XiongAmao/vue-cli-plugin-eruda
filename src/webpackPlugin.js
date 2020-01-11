@@ -1,4 +1,4 @@
-const inject = require('./mergeEntry')
+const injectEntry = require('./injectEntry')
 const isNotProdEnv = process.env.NODE_ENV !== 'production'
 
 class ErudaWebpackPlugin {
@@ -16,9 +16,9 @@ class ErudaWebpackPlugin {
     const pluginFunction = (ctx, entry) => {
       const enable = this.options.enable
       if (enable) {
-        inject(entry)
+        injectEntry(entry)
       }
-      return Promise.resolve()
+      // return Promise.resolve()
     }
 
     if (compiler.hooks) {
