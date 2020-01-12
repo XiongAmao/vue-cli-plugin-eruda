@@ -1,12 +1,11 @@
 const injectEntry = require('./injectEntry')
-const isNotProdEnv = process.env.NODE_ENV !== 'production'
 
 class ErudaWebpackPlugin {
   constructor(options = {}) {
     this.options = Object.assign(
       {
         // enable by default when NODE_ENV !== 'production'
-        enable: isNotProdEnv,
+        enable: process.env.NODE_ENV !== 'production',
         plugins: []
       },
       options
