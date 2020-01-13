@@ -4,7 +4,6 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
-    "@types/webpack": "^4.41.2",
     "camel-case": "^4.1.1",
     "chalk": "^3.0.0",
     "eruda": "^2.0.2",
@@ -18,9 +17,7 @@
     "eruda-orientation": "^2.0.0",
     "eruda-timing": "^2.0.0",
     "eruda-touches": "^2.0.0",
-    "fs-extra": "^8.1.0",
-    "webpack": "^4.41.5",
-    "webpack-cli": "^3.3.10"
+    "fs-extra": "^8.1.0"
   },
   "devDependencies": {},
   "scripts": {
