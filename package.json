@@ -6,6 +6,16 @@
   "dependencies": {
     "@types/webpack": "^4.41.2",
     "eruda": "^2.0.2",
+    "eruda-benchmark": "^2.0.0",
+    "eruda-code": "^2.0.0",
+    "eruda-dom": "^2.0.0",
+    "eruda-features": "^2.0.0",
+    "eruda-fps": "^2.0.0",
+    "eruda-geolocation": "^2.0.0",
+    "eruda-memory": "^2.0.0",
+    "eruda-orientation": "^2.0.0",
+    "eruda-timing": "^2.0.0",
+    "eruda-touches": "^2.0.0",
     "webpack": "^4.41.5",
     "webpack-cli": "^3.3.10"
   },
