@@ -1,7 +1,7 @@
 {
   "name": "vue-cli-plugin-eruda",
-  "version": "0.1.0",
-  "description": "",
+  "version": "1.0.0",
+  "description": "Eruda Console Plugin for Vue CLI 3+",
   "main": "index.js",
   "dependencies": {
     "camel-case": "^4.1.1",
@@ -19,10 +19,18 @@
     "eruda-touches": "^2.0.0",
     "fs-extra": "^8.1.0"
   },
-  "devDependencies": {},
-  "scripts": {
-    "b": "webpack --config webpack.config.js"
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/XiongAmao/vue-cli-plugin-eruda.git"
   },
+  "keywords": [
+    "console",
+    "mobile",
+    "debug"
+  ],
   "author": "Zichao Xiong <onycat@live.cn>",
-  "license": "MIT"
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/liriliri/eruda/issues"
+  }
 }
