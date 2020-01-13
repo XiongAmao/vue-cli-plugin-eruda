@@ -3,18 +3,27 @@ const VueCliErudaPlugin = require('./src/webpackPlugin')
 
 module.exports = {
   mode: 'development',
-  entry: {
-    // vue-cli will convert <string> entry to <array>
-    main: [
-      './demo/index.js' 
-    ]
+  // entry: {
+  //   // vue-cli will convert <string> entry to <array>
+  //   main: ['./demo/index.js'],
+  //   erudaaaa: ['./demo/eruda.js']
+  // },
+  // entry: ['./demo/index.js', './demo/eruda.js'],
+  entry: () => {
+    return Promise.resolve({
+      wtf: ['./demo/index.js'],
+      aaa: './demo/index.js'
+    })
   },
   output: {
-    filename: 'bundle.js',
-    chunkFilename: 'bundle.js',
+    filename: '[name].bundle.js',
+    chunkFilename: '[name].bundle.js',
     path: path.resolve(process.cwd(), 'dist')
   },
   plugins: [
-    new VueCliErudaPlugin()
+    new VueCliErudaPlugin({
+      enable: true,
+      plugins: ['fps', 'eruda-timi']
+    })
   ]
 }

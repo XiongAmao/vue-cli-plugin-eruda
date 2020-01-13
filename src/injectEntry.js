@@ -1,13 +1,14 @@
-const { isArray, isString, isObject } = require('./utils')
+const { isArray, isString, isObject, isFunction } = require('./utils')
 
-const stringWaring =
+const stringWarning =
   "[vue-cli-plugin-eruda] does not support webpack config's entry is <string>"
+const functionWarning = '[vue-cli-plugin-eruda] does not support webpack config\'s entry is \<function\>'
 
 const mergeEntry = (entry) => {
   const erudaPath = require.resolve('./eruda.js')
 
   if (isString(entry)) {
-    console.warn(stringWaring)
+    console.warn(stringWarning)
     return
   }
 
@@ -21,7 +22,7 @@ const mergeEntry = (entry) => {
       if (isArray(entry[key])) {
         entry[key].unshift(erudaPath)
       } else if (isString(entry[key])) {
-        console.warn(stringWaring)
+        console.warn(stringWarning)
       } 
     }
   }
