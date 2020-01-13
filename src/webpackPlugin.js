@@ -8,9 +8,17 @@ class ErudaWebpackPlugin {
   constructor(options = {}) {
     this.options = Object.assign(
       {
+        // plugin options
         // enable by default when NODE_ENV !== 'production'
         enable: process.env.NODE_ENV !== 'production',
-        plugins: []
+        exclude: [],
+        plugins: [],
+
+        // eruda init options
+        container: null,
+        tool: null,
+        autoScale: true,
+        useShadowDom: true
       },
       options
     );
@@ -43,23 +51,36 @@ class ErudaWebpackPlugin {
       return obj;
     }
   }
-  _filterEntry() {}
+  _filterEntry() {
+    // TODO:
+  }
 
   _writeErudaEntry() {
     const pluginStr = this._getPlugin();
+    const optionsStr = this._getInitOptions();
     const erudaStr = `var eruda = require("eruda");window.eruda === undefined && (window.eruda = eruda);`;
-    const initStr = `eruda.init();`;
-    // TODO: init(config)
+    const initStr = `eruda.init(${optionsStr});`;
 
     fs.writeFileSync(
       path.resolve(__dirname, './eruda-entry.js'),
-      erudaStr + pluginStr + initStr,
+      erudaStr + initStr + pluginStr,
       {
         encoding: 'utf8',
         flag: 'w'
       }
     );
     this.erudaEntryPath = require.resolve('./eruda-entry.js');
+  }
+
+  _getInitOptions() {
+    const { container, tool, autoScale, useShadowDom } = this.options;
+    const option = {
+      container,
+      autoScale,
+      useShadowDom
+    };
+    if (tool) option.tool = tool;
+    return JSON.stringify(option);
   }
 
   _getPlugin() {
@@ -91,8 +112,6 @@ class ErudaWebpackPlugin {
     }
     return pluginsStr;
   }
-
-  _addToosl() {}
 
   apply(compiler) {
     if (this.options.enable) {
