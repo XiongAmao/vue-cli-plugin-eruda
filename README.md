@@ -50,6 +50,11 @@ module.exports = {
       <td>When NODE_ENV !== 'production' plugin is enabled by default. You can pass true/false to force it to be enabled.</td>
     </tr>
     <tr>
+      <td>exclude</td>
+      <td>regexp | regexp[]</td>
+      <td>Used to exclude entries which you don't want to inject eruda. For example you are using "pages" option in vue.config.js</td>
+    </tr>
+    <tr>
       <td>plugins</td>
       <td>string[]</td>
       <td>Passing plugin name to enable eruda plugin. You can use full module(['eruda-fps']) or shorthand(e.g. ['fps'] )</td>

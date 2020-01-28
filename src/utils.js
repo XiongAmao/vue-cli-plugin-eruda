@@ -1,3 +1,5 @@
+const chalk = require('chalk');
+
 const isType = (type) => (val) => {
   return Object.prototype.toString.call(val) === `[object ${type}]`;
 };
@@ -18,9 +20,19 @@ const isFunction = (val) => {
   return typeof val === 'function' && isType('Function')(val);
 };
 
+const isRegExp = (val) => {
+  return typeof val === 'object' && isType('RegExp')(val);
+};
+
+const logWarn = (msg) => {
+  console.warn(chalk.red(msg));
+};
+
 module.exports = {
   isString,
   isArray,
   isObject,
-  isFunction
+  isFunction,
+  isRegExp,
+  logWarn
 };

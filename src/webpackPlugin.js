@@ -1,28 +1,45 @@
 const path = require('path');
 const fs = require('fs-extra');
-const chalk = require('chalk');
 const { camelCase } = require('camel-case');
-const { isFunction, isObject, isString, isArray } = require('./utils');
+const { isFunction, isObject, isString, isArray, logWarn } = require('./utils');
 
 class ErudaWebpackPlugin {
   constructor(options = {}) {
-    this.options = Object.assign(
-      {
-        // plugin options
-        // enable by default when NODE_ENV !== 'production'
-        enable: process.env.NODE_ENV !== 'production',
-        exclude: [],
-        plugins: [],
+    const isProdEnv = process.env.NODE_ENV === 'production';
+    const {
+      enable = !isProdEnv,
+      plugins = [],
+      container = null,
+      tool = null,
+      autoScale = true,
+      useShadowDom = true
+    } = options;
 
-        // eruda init options
-        container: null,
-        tool: null,
-        autoScale: true,
-        useShadowDom: true
-      },
-      options
-    );
+    let { exclude = [] } = options;
 
+    if (isString(exclude) || isRegExp(exclude)) {
+      exclude = [exclude];
+    } else if (!isArray(exclude)) {
+      logWarn(
+        `\n[vue-cli-plugin-eruda] Invalid options: "exclude" must be regexp/regexp[] \n`
+      );
+      exclude = [];
+    }
+
+    this.options = {
+      // plugin options
+      enable,
+      plugins,
+      exclude,
+
+      // eruda init options
+      container,
+      tool,
+      autoScale,
+      useShadowDom
+    };
+
+    // enable by default when NODE_ENV !== 'production'
     if (this.options.enable) {
       this._writeErudaEntry();
     }
@@ -35,13 +52,6 @@ class ErudaWebpackPlugin {
       return (...args) =>
         Promise.resolve(entry(...args)).then(this._amendEntry.bind(this));
 
-    if (isString(entry)) {
-      return [this.erudaEntryPath, entry];
-    }
-    if (isArray(entry)) {
-      return [this.erudaEntryPath, ...entry];
-    }
-
     // webpack object entry type: { <key> string | [string] }
     if (isObject(entry)) {
       const obj = {};
@@ -50,9 +60,31 @@ class ErudaWebpackPlugin {
       });
       return obj;
     }
+
+    if (isString(entry)) {
+      return this._inExclude([entry]) ? [entry] : [this.erudaEntryPath, entry];
+    }
+    if (isArray(entry)) {
+      return this._inExclude(entry) ? entry : [this.erudaEntryPath, ...entry];
+    }
   }
-  _filterEntry() {
-    // TODO:
+
+  _inExclude(entry) {
+    const { exclude = [] } = this.options;
+    for (let i = 0; i < exclude.length; i++) {
+      const rule = exclude[i];
+
+      for (let j = 0; j < entry.length; j++) {
+        const path = entry[j];
+        if (
+          (isString(rule) && path.startsWith(rule)) ||
+          (isRegExp(rule) && rule.test(path))
+        ) {
+          return true;
+        }
+      }
+    }
+    return false;
   }
 
   _writeErudaEntry() {
@@ -98,10 +130,8 @@ class ErudaWebpackPlugin {
           require.resolve(pluginName);
           hasModule = true;
         } catch (err) {
-          console.warn(
-            chalk.red(
-              `\n[vue-cli-plugin-eruda] Error: Cannot find eruda plugin "${val}". \nYou may need to install it.\n`
-            )
+          logWarn(
+            `\n[vue-cli-plugin-eruda] Error: Cannot find eruda plugin "${val}". \nYou may need to install it.\n`
           );
         }
 
