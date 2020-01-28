@@ -1,6 +1,6 @@
 {
   "name": "vue-cli-plugin-eruda",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Eruda Console Plugin for Vue CLI 3+",
   "main": "index.js",
   "dependencies": {

@@ -1,3 +1,8 @@
+# [1.1.0] (28 Jan 2020)
+
+- feat: entires `exclude` option.
+- docs: Add Chinese docs.
+
 # [1.0.0] (13 Jan 2020)
 
 - A Vue CLI 3+ plugin of eruda.
