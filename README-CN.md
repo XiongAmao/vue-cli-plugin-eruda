@@ -5,29 +5,29 @@
 
 > A Vue CLI 3+ plugin of [eruda](https://github.com/liriliri/eruda).
 
-[中文文档](https://github.com/XiongAmao/vue-cli-plugin-eruda/blob/master/README-CN.md)
+[English](https://github.com/XiongAmao/vue-cli-plugin-eruda#readme)
 
-## Installation
+## 安装
 
-Install under a project created by `Vue CLI`, It will automatically load this plugin.
+使用一下命令安装插件，`Vue CLI`, 
 
 ```bash
 npm install --save-dev vue-cli-plugin-eruda
 
-# If Vue CLI is installed globally
+# 如果你全局安装了Vue CLI
 vue add erudu
 ```
 
-## Global variable
+## 全局变量
 
-After injection, a global variable will be provided for calling [eruda](https://github.com/liriliri/eruda) API.
+启用插件后，会提供一个全局变量用于调用[eruda](https://github.com/liriliri/eruda)的API. 
 
 ```js
 var eruda = require("eruda");
 window.eruda === undefined && (window.eruda = eruda);
 ```
 
-## Options
+## 插件选项
 
 ```js
 // vue.config.js
@@ -54,42 +54,42 @@ module.exports = {
     <tr>
       <td>enable</td>
       <td>boolean</td>
-      <td>When NODE_ENV !== 'production' plugin is enabled by default. You can pass true/false to force it to be enabled.</td>
+      <td>默认情况下，当NODE_ENV !== 'production'时开启插件. 你可以传true或者false去强制开启/关闭。</td>
     </tr>
     <tr>
       <td>exclude</td>
       <td>regexp | regexp[]</td>
-      <td>Used to exclude entries which you don't want to inject eruda. For example you are using "pages" option in vue.config.js</td>
+      <td>用于排除你不需要注入eruda插件的入口文件(entry)。多页时使用(使用`vue.config.js`的`pages`选项定制)</td>
     </tr>
     <tr>
       <td>plugins</td>
       <td>string[]</td>
-      <td>Passing plugin name to enable eruda plugin. You can use full module(['eruda-fps']) or shorthand(e.g. ['fps'] )</td>
+      <td>开启eruda插件。你可以传递完整包名['eruda-fps'] 或者简写['fps']。</td>
     </tr>
     <tr>
       <td>container</td>
       <td>element</td>
-      <td>Container element. If not set, it will append an element directly under html root element</td>
+      <td>用于插件初始化的 Dom 元素，如果不设置，默认创建 div 作为容器直接置于 html 根结点下面。</td>
     </tr>
     <tr>
       <td>tool</td>
       <td>string[] | string</td>
-      <td>Choose which eruda's tools you want, by default all will be added.</td>
+      <td>指定要初始化哪些面板，默认加载所有。</td>
     </tr>
     <tr>
       <td>autoScale=true</td>
       <td>boolean</td>
-      <td>Auto scale eruda for different viewport settings.</td>
+      <td>自动缩放eruda以适应不同的viewport</td>
     </tr>
     <tr>
       <td>useShadowDom=true</td>
       <td>boolean</td>
-      <td>Use shadow dom for css encapsulation.</td>
+      <td>使用shadowdom封装css</td>
     </tr>
   </tbody>
 </table>
 
-`container`, `tool`, `autoScale`, `useShadowDom` are eruda's default configuration. You can check [document](https://github.com/liriliri/eruda/blob/master/doc/API.md) for more information.
+`container`, `tool`, `autoScale`, `useShadowDom` 是eruda默认配置项，你可以在[这里](https://github.com/liriliri/eruda/blob/master/doc/API.md)查看更多信息  。
 
 ## License
 
