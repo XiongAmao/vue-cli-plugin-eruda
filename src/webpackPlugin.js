@@ -1,7 +1,14 @@
 const path = require('path');
 const fs = require('fs-extra');
 const { camelCase } = require('camel-case');
-const { isFunction, isObject, isString, isArray, logWarn } = require('./utils');
+const {
+  isFunction,
+  isObject,
+  isString,
+  isArray,
+  logWarn,
+  isRegExp
+} = require('./utils');
 
 class ErudaWebpackPlugin {
   constructor(options = {}) {
