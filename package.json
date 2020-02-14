@@ -32,5 +32,8 @@
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/liriliri/eruda/issues"
+  },
+  "devDependencies": {
+    "eslint": "^6.8.0"
   }
 }
