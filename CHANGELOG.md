@@ -1,3 +1,7 @@
+# [1.1.1] (14 Feb 2020)
+
+- fix: isRegExp is not defined.
+
 # [1.1.0] (28 Jan 2020)
 
 - feat: entires `exclude` option.
