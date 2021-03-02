@@ -1,3 +1,8 @@
+# [1.2.0] (14 Feb 2020)
+
+- chore: Bump dependencies version.
+- feat: Rewrite with typescript.
+
 # [1.1.1] (14 Feb 2020)
 
 - fix: isRegExp is not defined.

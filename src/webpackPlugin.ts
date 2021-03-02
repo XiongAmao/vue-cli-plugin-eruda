@@ -1,17 +1,19 @@
-const path = require('path');
-const fs = require('fs-extra');
-const { camelCase } = require('camel-case');
-const {
-  isFunction,
-  isObject,
-  isString,
-  isArray,
-  logWarn,
-  isRegExp
-} = require('./utils');
+import { VueCliPluginErudaOptions, WebpackEntry } from './types';
+import * as Webpack from 'webpack';
+
+import * as path from 'path';
+import * as fs from 'fs-extra';
+import { isEntry, isString, log, isRegExp, isEntryFunc } from './utils';
+
+import { camelCase } from 'camel-case';
 
 class ErudaWebpackPlugin {
-  constructor(options = {}) {
+  options: Omit<Required<VueCliPluginErudaOptions>, 'exclude'> & {
+    exclude: string[] | RegExp[];
+  };
+  erudaEntryPath: string;
+
+  constructor(options: VueCliPluginErudaOptions = {}) {
     const isProdEnv = process.env.NODE_ENV === 'production';
     const {
       enable = !isProdEnv,
@@ -19,15 +21,17 @@ class ErudaWebpackPlugin {
       container = null,
       tool = null,
       autoScale = true,
-      useShadowDom = true
+      useShadowDom = true,
     } = options;
 
     let { exclude = [] } = options;
 
-    if (isString(exclude) || isRegExp(exclude)) {
+    if (isString(exclude)) {
       exclude = [exclude];
-    } else if (!isArray(exclude)) {
-      logWarn(
+    } else if (isRegExp(exclude)) {
+      exclude = [exclude];
+    } else if (!Array.isArray(exclude)) {
+      log.warn(
         `\n[vue-cli-plugin-eruda] Invalid options: "exclude" must be regexp/regexp[] \n`
       );
       exclude = [];
@@ -43,7 +47,7 @@ class ErudaWebpackPlugin {
       container,
       tool,
       autoScale,
-      useShadowDom
+      useShadowDom,
     };
 
     // enable by default when NODE_ENV !== 'production'
@@ -53,30 +57,39 @@ class ErudaWebpackPlugin {
   }
 
   // https://github.com/webpack/webpack/issues/6516
-  _amendEntry(entry) {
+  _amendEntry(entry: WebpackEntry): WebpackEntry {
     // vue-cli does not allow function type
-    if (isFunction(entry))
+    if (isEntryFunc(entry))
       return (...args) =>
         Promise.resolve(entry(...args)).then(this._amendEntry.bind(this));
 
     // webpack object entry type: { <key> string | [string] }
-    if (isObject(entry)) {
-      const obj = {};
+    if (isEntry(entry)) {
+      const newEntryObj: Webpack.Entry = {};
       Object.keys(entry).forEach((key) => {
-        obj[key] = this._amendEntry(entry[key]);
+        newEntryObj[key] = this._injectErudaEntryPath(entry[key]);
       });
-      return obj;
+      return newEntryObj;
     }
 
-    if (isString(entry)) {
-      return this._inExclude([entry]) ? [entry] : [this.erudaEntryPath, entry];
+    if (entry) {
+      return this._injectErudaEntryPath(entry);
     }
-    if (isArray(entry)) {
-      return this._inExclude(entry) ? entry : [this.erudaEntryPath, ...entry];
-    }
+
+    return entry;
   }
 
-  _inExclude(entry) {
+  _injectErudaEntryPath(entry: string | string[]): string[] | string {
+    if (isString(entry)) {
+      return this._inExclude([entry]) ? [entry] : [this.erudaEntryPath, entry];
+    } else if (Array.isArray(entry)) {
+      return this._inExclude(entry) ? entry : [this.erudaEntryPath, ...entry];
+    }
+
+    return entry;
+  }
+
+  _inExclude(entry: string | string[]): boolean {
     const { exclude = [] } = this.options;
     for (let i = 0; i < exclude.length; i++) {
       const rule = exclude[i];
@@ -94,7 +107,7 @@ class ErudaWebpackPlugin {
     return false;
   }
 
-  _writeErudaEntry() {
+  _writeErudaEntry(): void {
     const pluginStr = this._getPlugin();
     const optionsStr = this._getInitOptions();
     const erudaStr = `var eruda = require("eruda");window.eruda === undefined && (window.eruda = eruda);`;
@@ -105,28 +118,33 @@ class ErudaWebpackPlugin {
       erudaStr + initStr + pluginStr,
       {
         encoding: 'utf8',
-        flag: 'w'
+        flag: 'w',
       }
     );
     this.erudaEntryPath = require.resolve('./eruda-entry.js');
   }
 
-  _getInitOptions() {
+  _getInitOptions(): string {
     const { container, tool, autoScale, useShadowDom } = this.options;
-    const option = {
+    const option: {
+      container: VueCliPluginErudaOptions['container'];
+      autoScale: VueCliPluginErudaOptions['autoScale'];
+      useShadowDom: VueCliPluginErudaOptions['useShadowDom'];
+      tool?: VueCliPluginErudaOptions['tool'];
+    } = {
       container,
       autoScale,
-      useShadowDom
+      useShadowDom,
     };
     if (tool) option.tool = tool;
     return JSON.stringify(option);
   }
 
-  _getPlugin() {
+  _getPlugin(): string {
     const plugins = this.options.plugins;
     let pluginsStr = '';
 
-    if (isArray(plugins)) {
+    if (Array.isArray(plugins)) {
       [...plugins].forEach((val) => {
         let pluginName = val;
         let hasModule = false;
@@ -137,7 +155,7 @@ class ErudaWebpackPlugin {
           require.resolve(pluginName);
           hasModule = true;
         } catch (err) {
-          logWarn(
+          log.warn(
             `\n[vue-cli-plugin-eruda] Error: Cannot find eruda plugin "${val}". \nYou may need to install it.\n`
           );
         }
@@ -150,11 +168,11 @@ class ErudaWebpackPlugin {
     return pluginsStr;
   }
 
-  apply(compiler) {
+  apply(compiler: Webpack.Compiler): void {
     if (this.options.enable) {
       compiler.options.entry = this._amendEntry(compiler.options.entry);
     }
   }
 }
 
-module.exports = ErudaWebpackPlugin;
+export default ErudaWebpackPlugin;

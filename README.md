@@ -5,7 +5,7 @@
 
 > A Vue CLI 3+ plugin of [eruda](https://github.com/liriliri/eruda).
 
-[中文文档](https://github.com/XiongAmao/vue-cli-plugin-eruda/blob/master/README-CN.md)
+[中文文档](https://github.com/XiongAmao/vue-cli-plugin-eruda/blob/master/README.zh-CN.md)
 
 ## Installation
 
