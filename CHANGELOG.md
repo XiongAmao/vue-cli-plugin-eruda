@@ -1,4 +1,4 @@
-# [1.2.0] (14 Feb 2020)
+# [1.2.1] (02 March 2021)
 
 - chore: Bump dependencies version.
 - feat: Rewrite with typescript.
