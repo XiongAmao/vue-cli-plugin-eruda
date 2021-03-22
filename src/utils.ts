@@ -6,16 +6,16 @@ export const isType = (type: string) => (val: unknown): boolean => {
 };
 
 export const isString = (val: unknown): val is string => {
-  return typeof val === 'string' && isType('String')(val);
+  return typeof val === 'string';
 };
 
-export const isObject = (val: unknown): val is Record<string, unknown> => {
-  return !!val && isType('Object')(val);
+export const isPlainObject = (val: unknown): val is Record<string, unknown> => {
+  return val !== null && typeof val === 'object';
 };
 
 // only for webpack@4.x
 export const isEntry = (val: unknown): val is Webpack.Entry => {
-  if (isObject(val)) {
+  if (isPlainObject(val)) {
     return Object.values(val).every((value) => {
       return (
         isString(value) ||
@@ -27,15 +27,11 @@ export const isEntry = (val: unknown): val is Webpack.Entry => {
 };
 
 export const isRegExp = (val: unknown): val is RegExp => {
-  return typeof val === 'object' && isType('RegExp')(val);
-};
-
-export const isFunction = (val: unknown): boolean => {
-  return typeof val === 'function' && isType('Function')(val);
+  return isPlainObject(val) && isType('RegExp')(val);
 };
 
 export const isEntryFunc = (val: unknown): val is Webpack.EntryFunc => {
-  return typeof val === 'function' && isType('Function')(val);
+  return typeof val === 'function';
 };
 
 export const log = {
