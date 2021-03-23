@@ -108,19 +108,23 @@ class ErudaWebpackPlugin {
   }
 
   _writeErudaEntry(): void {
+    const entryPath = path.resolve(__dirname, './eruda-entry.js');
     const pluginStr = this._getPlugin();
     const optionsStr = this._getInitOptions();
     const erudaStr = `var eruda = require("eruda");window.eruda === undefined && (window.eruda = eruda);`;
     const initStr = `eruda.init(${optionsStr});`;
+    const fileStr = erudaStr + initStr + pluginStr;
+    const cache = fs.existsSync(entryPath)
+      ? fs.readFileSync(entryPath).toString()
+      : '';
 
-    fs.writeFileSync(
-      path.resolve(__dirname, './eruda-entry.js'),
-      erudaStr + initStr + pluginStr,
-      {
+    if (cache !== fileStr) {
+      fs.writeFileSync(entryPath, fileStr, {
         encoding: 'utf8',
         flag: 'w',
-      }
-    );
+      });
+    }
+
     this.erudaEntryPath = require.resolve('./eruda-entry.js');
   }
 
