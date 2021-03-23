@@ -1,3 +1,7 @@
+# [1.3.0] (24 March 2021)
+
+- fix: File rewrites when the same config file already exist.
+
 # [1.2.1] (02 March 2021)
 
 - chore: Bump dependencies version.
