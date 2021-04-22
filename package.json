@@ -5,7 +5,9 @@
   "main": "./dist/index.js",
   "scripts": {
     "dev": "tsc -w",
-    "build": "tsc"
+    "build": "tsc",
+    "prepare": "husky install",
+    "pre-commit": "lint-staged"
   },
   "dependencies": {
     "camel-case": "^4.1.2",
@@ -44,11 +46,18 @@
     "@typescript-eslint/eslint-plugin": "^4.15.2",
     "@typescript-eslint/parser": "^4.15.2",
     "eslint": "^7.21.0",
+    "husky": "^6.0.0",
+    "lint-staged": "^10.5.4",
     "typescript": "^4.2.2",
     "webpack-chain": "^6.5.1"
   },
   "peerDependencies": {
     "@vue/cli-service": "^3.0.0 || ^4.0.0"
+  },
+  "lint-staged": {
+    "src/**/*.{js,ts,tsx}": [
+      "eslint --fix"
+    ]
   },
   "files": [
     "dist",
