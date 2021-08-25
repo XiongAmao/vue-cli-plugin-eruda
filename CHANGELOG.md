@@ -1,3 +1,7 @@
+# [1.4.0] (25 August 2021)
+
+- feat: Add eruda `defaults` option.
+
 # [1.3.0] (24 March 2021)
 
 - fix: File rewrites when the same config file already exist.

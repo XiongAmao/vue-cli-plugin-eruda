@@ -86,10 +86,23 @@ module.exports = {
       <td>boolean</td>
       <td>Use shadow dom for css encapsulation.</td>
     </tr>
+    <tr>
+      <td>defaults	</td>
+      <td>object</td>
+      <td>Default settings.</td>
+    </tr>
   </tbody>
 </table>
 
-`container`, `tool`, `autoScale`, `useShadowDom` are eruda's default configuration. You can check [document](https://github.com/liriliri/eruda/blob/master/doc/API.md) for more information.
+Available `defaults` settings:
+|Name        |Type  |Desc                                         |
+|------------|------|---------------------------------------------|
+|transparency|number|Transparency, 0 to 1                         |
+|displaySize |number|Display size, 0 to 100                       |
+|theme       |string|Theme, defaults to Light or Dark in dark mode|
+
+
+`container`, `tool`, `autoScale`, `useShadowDom`, `defaults` are eruda's default configuration. You can check [document](https://github.com/liriliri/eruda/blob/master/doc/API.md) for more information.
 
 ## License
 

@@ -86,10 +86,22 @@ module.exports = {
       <td>boolean</td>
       <td>使用shadowdom封装css</td>
     </tr>
+    <tr>
+      <td>defaults	</td>
+      <td>object</td>
+      <td>默认配置项</td>
+    </tr>
   </tbody>
 </table>
 
-`container`, `tool`, `autoScale`, `useShadowDom` 是eruda默认配置项，你可以在[这里](https://github.com/liriliri/eruda/blob/master/doc/API.md)查看更多信息  。
+可用的 `defaults` 选项:
+|Name        |Type  |Desc                                         |
+|------------|------|---------------------------------------------|
+|transparency|number|Transparency, 0 to 1                         |
+|displaySize |number|Display size, 0 to 100                       |
+|theme       |string|Theme, defaults to Light or Dark in dark mode|
+
+`container`, `tool`, `autoScale`, `useShadowDom`, `defaults`是eruda默认配置项，你可以在[这里](https://github.com/liriliri/eruda/blob/master/doc/API.md)查看更多信息  。
 
 ## License
 
