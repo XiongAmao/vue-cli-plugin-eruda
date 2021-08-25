@@ -8,8 +8,9 @@ import { isEntry, isString, log, isRegExp, isEntryFunc } from './utils';
 import { camelCase } from 'camel-case';
 
 class ErudaWebpackPlugin {
-  options: Omit<Required<VueCliPluginErudaOptions>, 'exclude'> & {
+  options: Omit<Required<VueCliPluginErudaOptions>, 'exclude' | 'defaults'> & {
     exclude: string[] | RegExp[];
+    defaults?: VueCliPluginErudaOptions['defaults']
   };
   erudaEntryPath: string;
 
@@ -22,6 +23,7 @@ class ErudaWebpackPlugin {
       tool = null,
       autoScale = true,
       useShadowDom = true,
+      defaults
     } = options;
 
     let { exclude = [] } = options;
@@ -48,6 +50,7 @@ class ErudaWebpackPlugin {
       tool,
       autoScale,
       useShadowDom,
+      defaults
     };
 
     // enable by default when NODE_ENV !== 'production'
@@ -129,18 +132,21 @@ class ErudaWebpackPlugin {
   }
 
   _getInitOptions(): string {
-    const { container, tool, autoScale, useShadowDom } = this.options;
+    const { container, tool, autoScale, useShadowDom, defaults } = this.options;
     const option: {
       container: VueCliPluginErudaOptions['container'];
       autoScale: VueCliPluginErudaOptions['autoScale'];
       useShadowDom: VueCliPluginErudaOptions['useShadowDom'];
       tool?: VueCliPluginErudaOptions['tool'];
+      defaults?: VueCliPluginErudaOptions['defaults']
     } = {
       container,
       autoScale,
       useShadowDom,
+      defaults
     };
     if (tool) option.tool = tool;
+    if (defaults) option.defaults = defaults
     return JSON.stringify(option);
   }
 

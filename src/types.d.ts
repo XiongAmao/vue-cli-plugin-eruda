@@ -20,6 +20,11 @@ export interface VueCliPluginErudaOptions {
   tool?: string | string[] | null;
   autoScale?: boolean;
   useShadowDom?: boolean;
+  defaults?: {
+    transparency: number;
+    displaySize: number;
+    theme: 'Dark' | 'Light';
+  }
 }
 
 export interface ProjectOptions {
