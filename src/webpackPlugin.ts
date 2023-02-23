@@ -10,7 +10,8 @@ import { camelCase } from 'camel-case';
 class ErudaWebpackPlugin {
   options: Omit<Required<VueCliPluginErudaOptions>, 'exclude' | 'defaults'> & {
     exclude: string[] | RegExp[];
-    defaults?: VueCliPluginErudaOptions['defaults']
+    defaults?: VueCliPluginErudaOptions['defaults'];
+    isCli5?: boolean;
   };
   erudaEntryPath: string;
 
@@ -23,10 +24,12 @@ class ErudaWebpackPlugin {
       tool = null,
       autoScale = true,
       useShadowDom = true,
-      defaults
+      defaults,
+      apiVersion = '',
     } = options;
 
     let { exclude = [] } = options;
+    let isCli5 = false;
 
     if (isString(exclude)) {
       exclude = [exclude];
@@ -37,6 +40,12 @@ class ErudaWebpackPlugin {
         `\n[vue-cli-plugin-eruda] Invalid options: "exclude" must be regexp/regexp[] \n`
       );
       exclude = [];
+    }
+
+    if (apiVersion) {
+      if (Number(apiVersion.split('.')[0]) >= 5) {
+        isCli5 = true;
+      }
     }
 
     this.options = {
@@ -50,7 +59,9 @@ class ErudaWebpackPlugin {
       tool,
       autoScale,
       useShadowDom,
-      defaults
+      defaults,
+      apiVersion,
+      isCli5,
     };
 
     // enable by default when NODE_ENV !== 'production'
@@ -138,15 +149,15 @@ class ErudaWebpackPlugin {
       autoScale: VueCliPluginErudaOptions['autoScale'];
       useShadowDom: VueCliPluginErudaOptions['useShadowDom'];
       tool?: VueCliPluginErudaOptions['tool'];
-      defaults?: VueCliPluginErudaOptions['defaults']
+      defaults?: VueCliPluginErudaOptions['defaults'];
     } = {
       container,
       autoScale,
       useShadowDom,
-      defaults
+      defaults,
     };
     if (tool) option.tool = tool;
-    if (defaults) option.defaults = defaults
+    if (defaults) option.defaults = defaults;
     return JSON.stringify(option);
   }
 

@@ -10,6 +10,7 @@ export type WebpackChainFn = (chainableConfig: ChainableConfig) => void;
 export interface PluginAPI {
   configureWebpack(fn: webpackRawConfigFn): void;
   chainWebpack(fn: WebpackChainFn): void;
+  version?: string
 }
 
 export interface VueCliPluginErudaOptions {
@@ -24,7 +25,8 @@ export interface VueCliPluginErudaOptions {
     transparency: number;
     displaySize: number;
     theme: 'Dark' | 'Light';
-  }
+  },
+  apiVersion?: string
 }
 
 export interface ProjectOptions {
