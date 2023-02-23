@@ -12,18 +12,18 @@
   "dependencies": {
     "camel-case": "^4.1.2",
     "chalk": "^4.1.0",
-    "eruda": "^2.4.1",
+    "eruda": "^2.11.0",
     "eruda-benchmark": "^2.0.0",
-    "eruda-code": "^2.0.0",
+    "eruda-code": "^2.1.0",
     "eruda-dom": "^2.0.0",
     "eruda-features": "^2.0.0",
     "eruda-fps": "^2.0.0",
     "eruda-geolocation": "^2.0.0",
     "eruda-memory": "^2.0.0",
     "eruda-orientation": "^2.0.0",
-    "eruda-timing": "^2.0.0",
+    "eruda-timing": "^2.0.1",
     "eruda-touches": "^2.0.0",
-    "fs-extra": "^9.1.0"
+    "fs-extra": "^11.0.1"
   },
   "repository": {
     "type": "git",
@@ -40,8 +40,8 @@
     "url": "https://github.com/liriliri/eruda/issues"
   },
   "devDependencies": {
-    "@types/fs-extra": "^9.0.7",
-    "@types/node": "^14.14.31",
+    "@types/fs-extra": "^11.0.1",
+    "@types/node": "^16.0.0",
     "@types/webpack": "^4.41.26",
     "@typescript-eslint/eslint-plugin": "^4.15.2",
     "@typescript-eslint/parser": "^4.15.2",
