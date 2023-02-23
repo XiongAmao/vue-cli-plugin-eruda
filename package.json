@@ -52,7 +52,7 @@
     "webpack-chain": "^6.5.1"
   },
   "peerDependencies": {
-    "@vue/cli-service": "^3.0.0 || ^4.0.0"
+    "@vue/cli-service": ">=3.0.0"
   },
   "lint-staged": {
     "src/**/*.{js,ts,tsx}": [

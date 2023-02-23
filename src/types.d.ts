@@ -1,16 +1,10 @@
-import * as Webpack from 'webpack';
 import * as ChainableConfig from 'webpack-chain';
-
-export type webpackRawConfigFn =
-  | ((config: Webpack.Configuration) => Webpack.Configuration | void)
-  | Webpack.Configuration;
 
 export type WebpackChainFn = (chainableConfig: ChainableConfig) => void;
 
 export interface PluginAPI {
-  configureWebpack(fn: webpackRawConfigFn): void;
   chainWebpack(fn: WebpackChainFn): void;
-  version?: string
+  version?: string;
 }
 
 export interface VueCliPluginErudaOptions {
@@ -25,8 +19,8 @@ export interface VueCliPluginErudaOptions {
     transparency: number;
     displaySize: number;
     theme: 'Dark' | 'Light';
-  },
-  apiVersion?: string
+  };
+  apiVersion?: string;
 }
 
 export interface ProjectOptions {
@@ -35,4 +29,32 @@ export interface ProjectOptions {
   };
 }
 
-export type WebpackEntry = Webpack.Configuration['entry'];
+// webpack4
+export type ForkEntryItem = string | string[];
+// webpack5 only
+export interface ForkEntryDescription {
+  import: string | string[];
+  [index: string]: any;
+}
+export interface ForkEntryObject {
+  [name: string]: ForkEntryItem | ForkEntryDescription;
+}
+
+export type ForkEntryFunc = () =>
+  | string
+  | string[]
+  | ForkEntryObject
+  | Promise<string | string[] | ForkEntryObject>;
+
+export type ForkWebpackEntry =
+  | string
+  | string[]
+  | ForkEntryObject
+  | ForkEntryFunc
+  | undefined;
+
+export interface ForkWebpackCompiler {
+  options: {
+    entry?: ForkWebpackEntry;
+  };
+}

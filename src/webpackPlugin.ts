@@ -1,9 +1,22 @@
-import { VueCliPluginErudaOptions, WebpackEntry } from './types';
-import * as Webpack from 'webpack';
+import {
+  ForkEntryItem,
+  ForkEntryObject,
+  ForkWebpackCompiler,
+  ForkWebpackEntry,
+  VueCliPluginErudaOptions,
+} from './types';
 
-import * as path from 'path';
 import * as fs from 'fs-extra';
-import { isEntry, isString, log, isRegExp, isEntryFunc } from './utils';
+import * as path from 'path';
+import {
+  isEntryDescription,
+  isEntryFunc,
+  isEntryItem,
+  isPlainObject,
+  isRegExp,
+  isString,
+  log,
+} from './utils';
 
 import { camelCase } from 'camel-case';
 
@@ -71,35 +84,47 @@ class ErudaWebpackPlugin {
   }
 
   // https://github.com/webpack/webpack/issues/6516
-  _amendEntry(entry: WebpackEntry): WebpackEntry {
+  _amendEntryWebpack(entry: ForkWebpackEntry): ForkWebpackEntry {
     // vue-cli does not allow function type
     if (isEntryFunc(entry))
       return (...args) =>
-        Promise.resolve(entry(...args)).then(this._amendEntry.bind(this));
+        Promise.resolve(entry(...args)).then(
+          this._amendEntryWebpack.bind(this)
+        );
 
-    // webpack object entry type: { <key> string | [string] }
-    if (isEntry(entry)) {
-      const newEntryObj: Webpack.Entry = {};
-      Object.keys(entry).forEach((key) => {
-        newEntryObj[key] = this._injectErudaEntryPath(entry[key]);
-      });
-      return newEntryObj;
+    // webpack4 string | string[]
+    if (isEntryItem(entry)) {
+      return this._injectErudaEntryPath(entry);
     }
 
-    if (entry) {
-      return this._injectErudaEntryPath(entry);
+    if (isPlainObject(entry)) {
+      const newEntryObject: ForkEntryObject = {};
+      Object.entries(entry).forEach(([key, val]) => {
+        // webpack 4
+        if (isEntryItem(val)) {
+          newEntryObject[key] = this._injectErudaEntryPath(val);
+        }
+        // webpack 5
+        if (isEntryDescription(val)) {
+          newEntryObject[key] = {
+            ...val,
+            import: this._injectErudaEntryPath(val.import),
+          };
+        }
+      });
+
+      return newEntryObject;
     }
 
     return entry;
   }
 
-  _injectErudaEntryPath(entry: string | string[]): string[] | string {
+  _injectErudaEntryPath(entry: ForkEntryItem): ForkEntryItem {
     if (isString(entry)) {
       return this._inExclude([entry]) ? [entry] : [this.erudaEntryPath, entry];
     } else if (Array.isArray(entry)) {
       return this._inExclude(entry) ? entry : [this.erudaEntryPath, ...entry];
     }
-
     return entry;
   }
 
@@ -189,9 +214,9 @@ class ErudaWebpackPlugin {
     return pluginsStr;
   }
 
-  apply(compiler: Webpack.Compiler): void {
+  apply(compiler: ForkWebpackCompiler): void {
     if (this.options.enable) {
-      compiler.options.entry = this._amendEntry(compiler.options.entry);
+      compiler.options.entry = this._amendEntryWebpack(compiler.options.entry);
     }
   }
 }
