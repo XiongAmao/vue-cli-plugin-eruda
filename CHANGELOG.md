@@ -1,3 +1,7 @@
+# [1.5.0] (24 Feb. 2023)
+
+- feat: Support vue-cli@5.
+
 # [1.4.0] (25 August 2021)
 
 - feat: Add eruda `defaults` option.
